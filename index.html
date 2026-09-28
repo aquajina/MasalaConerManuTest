@@ -9,9 +9,12 @@
     API. This means menu items can be changed in the data source
     without editing this HTML file.
 
-    IMPORTANT:
-    The comments in this file are only explanations. The existing
-    website code and behaviour are kept unchanged.
+    TV LAYOUT RULES (new):
+      - Always 2 columns
+      - Max 6 rows per column
+      - Categories with more than 6 items split across columns
+        (header shows 1/2, 2/2, ...)
+      - Small categories (<= 6 items) share a slide, one per column
     ------------------------------------------------------------
 -->
 <!DOCTYPE html>
@@ -22,11 +25,6 @@
 <title>Masala Corner | Menu</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-  /*
-     GLOBAL CSS RESET
-     Removes the browser's default margins and padding.
-     box-sizing makes width/height calculations easier.
-  */
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
@@ -36,18 +34,7 @@
   }
   .loading { text-align: center; padding: 3rem; color: #2c6d91; font-weight: 600; }
 
-  /*
-     ============================================================
-     MOBILE / NORMAL WEB MENU
-     ============================================================
-     The rules below control the normal restaurant menu shown on
-     phones, tablets and normal computer screens.
-
-     JavaScript later adds the class "mobile-mode" to <body>
-     when the page is running in this mode.
-     ============================================================
-  */
-  /* ===================== MOBILE ===================== */
+  /* ===================== MOBILE (unchanged) ===================== */
   body.mobile-mode {
     background: linear-gradient(135deg, #cce7ff 0%, #a8d4fc 100%);
     padding: 2rem 1.2rem;
@@ -79,14 +66,9 @@
   }
   body.mobile-mode .location-contact i { margin-right: 6px; color: #ff7e2e; }
   body.mobile-mode .location-contact a,
-  body.mobile-mode .note-extra a {
-    color: inherit;
-    text-decoration: none;
-  }
+  body.mobile-mode .note-extra a { color: inherit; text-decoration: none; }
   body.mobile-mode .location-contact a:hover,
-  body.mobile-mode .note-extra a:hover {
-    text-decoration: underline;
-  }
+  body.mobile-mode .note-extra a:hover { text-decoration: underline; }
   body.mobile-mode .tagline { font-size: 0.9rem; margin-top: 10px; color: #2c6d91; font-weight: 500; }
   body.mobile-mode .tab-buttons {
     display: flex; flex-wrap: wrap; gap: 12px;
@@ -163,11 +145,6 @@
     text-align: center; margin-top: 28px; font-size: 0.7rem;
     color: #22668d; border-top: 1px solid #bbdef5; padding-top: 18px;
   }
-  /*
-     SMALL PHONE SCREEN
-     These rules make fonts, buttons and images smaller when the
-     screen width is 750px or less.
-  */
   @media (max-width: 750px) {
     body.mobile-mode { padding: 1rem; }
     body.mobile-mode .resto-header h1 { font-size: 2rem; }
@@ -177,22 +154,6 @@
     body.mobile-mode .item-desc { font-size: 0.68rem; }
   }
 
-  /*
-     ============================================================
-     TV / DIGITAL DISPLAY MENU
-     ============================================================
-     This section controls the large-screen restaurant display.
-
-     The TV layout:
-       - fills the screen
-       - uses a dark background
-       - shows menu categories in columns
-       - automatically changes slides
-       - can play background music
-
-     JavaScript decides whether this layout is used.
-     ============================================================
-  */
   /* ===================== TV ===================== */
   body.tv-mode {
     background: #05131c;
@@ -200,13 +161,6 @@
     overflow: hidden;
     height: 100vh;
   }
-  /*
-     TV BACKGROUND IMAGE
-     A restaurant photograph is placed behind the menu.
-     A dark transparent overlay is added so the white/orange
-     menu text remains easy to read.
-  */
-  /* TV background image with dark overlay */
   body.tv-mode::before {
     content: "";
     position: fixed;
@@ -240,10 +194,7 @@
     text-shadow: 0 2px 6px rgba(0,0,0,0.6);
   }
   body.tv-mode .tv-header .contact i { color: #ff914d; margin-right: 0.4vw; }
-  body.tv-mode .tv-header .contact a {
-    color: inherit;
-    text-decoration: none;
-  }
+  body.tv-mode .tv-header .contact a { color: inherit; text-decoration: none; }
   body.tv-mode .menu-badge {
     display: inline-block; background: #ff914d; color: #05131c;
     font-weight: 800; padding: 0.6vh 1.4vw; border-radius: 60px;
@@ -274,6 +225,17 @@
     padding-bottom: 0.8vh; margin-bottom: 1vh;
     display: flex; align-items: center; gap: 0.6vw;
     text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  }
+  /* Part indicator shown when a category is split, e.g. "1/2" */
+  body.tv-mode .cat-col h2 .tv-part {
+    font-size: 1.4vh;
+    color: #a7c9dd;
+    font-weight: 600;
+    letter-spacing: 0;
+    margin-left: 0.6vw;
+    padding: 0.2vh 0.6vw;
+    border-radius: 20px;
+    background: rgba(123,213,255,0.15);
   }
   body.tv-mode .cat-col table { width: 100%; border-collapse: collapse; }
   body.tv-mode .cat-col td {
@@ -318,23 +280,10 @@
 </head>
 <body>
 
-<!--
-     ============================================================
-     MOBILE HTML LAYOUT
-     ============================================================
-     This is the normal customer-facing menu.
-
-     Menu items are NOT hard-coded here.
-     The empty food-grid and drinks-grid containers are filled
-     automatically by JavaScript after it receives the menu data.
-     ============================================================
--->
 <!-- ============ MOBILE LAYOUT ============ -->
 <div class="menu-wrapper">
   <div class="resto-header">
-    <!-- Restaurant name and decorative Font Awesome icons -->
     <h1><i class="fas fa-utensils"></i> MASALA CORNER <i class="fas fa-pepper-hot"></i></h1>
-    <!-- Restaurant location and phone number shown in the mobile header -->
     <div class="location-contact">
       <span><i class="fas fa-location-dot"></i> A.Dh Fenfushi, Maldives</span>
       <span><i class="fas fa-phone-alt"></i> <a href="tel:+9607555990">+960 7555990</a></span>
@@ -347,17 +296,11 @@
     <button class="tab-btn" data-tab="drinks"><i class="fas fa-mug-hot"></i> DRINKS & BEVERAGES</button>
   </div>
 
-  <!-- FOOD MENU CONTAINER
-       JavaScript inserts the food categories and items into food-grid.
-  -->
   <div id="food-tab" class="tab-content active-tab">
     <div class="category-grid" id="food-grid"><div class="loading">Loading menu…</div></div>
     <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: <a href="tel:+9607555990">7555990</a></span></div>
   </div>
 
-  <!-- DRINKS MENU CONTAINER
-       JavaScript inserts the drinks categories and items into drinks-grid.
-  -->
   <div id="drinks-tab" class="tab-content">
     <div class="category-grid" id="drinks-grid"><div class="loading">Loading menu…</div></div>
     <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: <a href="tel:+9607555990">7555990</a></span></div>
@@ -366,18 +309,8 @@
   <footer><i class="fas fa-heart" style="color:#f45b2e;"></i> Masala Corner – A.Dh Fenfushi, Maldives | All prices in MVR</footer>
 </div>
 
-<!--
-     ============================================================
-     TV HTML LAYOUT
-     ============================================================
-     This layout is hidden during mobile mode.
-
-     JavaScript creates the actual TV slides inside slideWrap.
-     ============================================================
--->
 <!-- ============ TV LAYOUT ============ -->
 <div class="tv-frame">
-  <!-- TV header: restaurant name on the left, contact information on the right -->
   <div class="tv-header">
     <h1><i class="fas fa-utensils"></i> MASALA CORNER</h1>
     <div class="contact">
@@ -385,29 +318,11 @@
       <div><i class="fas fa-phone-alt"></i> Order: <a href="tel:+9607555990">7555990</a></div>
     </div>
   </div>
-  <!--
-       Current menu type.
-       JavaScript changes this between "FOOD MENU" and
-       "DRINKS & BEVERAGES" when slides change.
-  -->
   <div><span class="menu-badge" id="badge">FOOD MENU</span></div>
-  <!--
-       TV SLIDE CONTAINER
-       JavaScript creates all TV slides inside this element.
-  -->
   <div class="slide-wrap" id="slideWrap"><div class="loading">Loading menu…</div></div>
-  <!--
-       TV SLIDE PROGRESS INDICATORS
-       JavaScript creates one indicator for each slide.
-  -->
   <div class="progress" id="progress"></div>
 </div>
 
-<!--
-     TV background music.
-     The browser may block automatic audio until the first user interaction.
-     The JavaScript below tries to handle that limitation.
--->
 <audio id="bgMusic" loop preload="auto">
   <source src="music.mp3" type="audio/mpeg">
 </audio>
@@ -416,24 +331,14 @@
 /* ========================================================================
    CONFIG
    ======================================================================== */
-/* Google Apps Script API providing the menu data.
-   Keep this URL unchanged unless the Google Apps Script is replaced. */
 const API_URL = 'https://script.google.com/macros/s/AKfycby48ltyZglhe5XCC8ESGXglugIx4gtXkbF6pT6T5PRsd06mdDVLIC2nBvK4FTvV6NkM/exec';
-/* How long each TV slide is displayed, in seconds. */
-const TV_SLIDE_SECONDS = 18;
-/* Target number of menu items per TV slide. */
-const TV_ITEMS_PER_SLIDE = 7;
-/* Browser width at which TV mode is automatically selected.
-   Example: 1200 means screens 1200px wide or larger use TV mode. */
-const TV_AUTODETECT_WIDTH = 1200;
+const TV_SLIDE_SECONDS = 18;       /* seconds each slide is shown */
+const TV_ROWS_PER_COLUMN = 6;      /* max rows per TV column */
+const TV_AUTODETECT_WIDTH = 1200;  /* screen width that triggers TV mode */
 
 /* ========================================================================
    MODE DETECTION
    ======================================================================== */
-/* Optional manual mode:
-   ?mode=tv     -> force TV mode
-   ?mode=mobile -> force mobile/web mode
-   Without a mode, the screen width decides automatically. */
 const params = new URLSearchParams(location.search);
 const forcedMode = params.get('mode');
 const isTV = forcedMode === 'tv' ||
@@ -444,25 +349,12 @@ document.title = 'Masala Corner | ' + (isTV ? 'TV Menu' : 'Menu');
 /* ========================================================================
    HELPERS
    ======================================================================== */
-/*
-   FORMAT PRICE
-   Makes sure prices are displayed with "MVR".
-   Example:
-       50       -> MVR 50
-       MVR 50   -> MVR 50
-*/
 function formatPrice(p) {
   if (!p) return '';
   const s = String(p).trim();
   return /^mvr/i.test(s) ? s.toUpperCase() : 'MVR ' + s;
 }
 
-/*
-   ESCAPE HTML
-   Safely converts special HTML characters in menu data.
-   This prevents menu text from accidentally being interpreted
-   as HTML code.
-*/
 function escapeHTML(s) {
   return String(s)
     .replace(/&/g, '&amp;')
@@ -470,15 +362,6 @@ function escapeHTML(s) {
     .replace(/>/g, '&gt;');
 }
 
-/*
-   GROUP MENU ITEMS BY CATEGORY
-
-   Example:
-     Starters -> item 1, item 2
-     Rice     -> item 3, item 4
-
-   The category image is also kept with the category.
-*/
 function groupByCategory(items) {
   const list = [], map = {};
   items.forEach(i => {
@@ -494,11 +377,6 @@ function groupByCategory(items) {
 /* ========================================================================
    MOBILE RENDER
    ======================================================================== */
-/*
-   BUILD MOBILE MENU CARDS
-   Receives grouped categories and creates the HTML displayed
-   inside the food-grid or drinks-grid elements.
-*/
 function buildMobileCards(categories) {
   if (!categories.length) return '<div class="loading">No items yet.</div>';
   return categories.map(cat => {
@@ -529,43 +407,64 @@ function buildMobileCards(categories) {
 
 /* ========================================================================
    TV RENDER
+   ========================================================================
+   Every slide has exactly 2 columns. Every column has up to 6 rows.
+
+   Building process:
+     1. For each category:
+          - If it has <= 6 items  -> one column
+          - If it has  > 6 items  -> split into chunks of 6; each chunk
+                                     becomes its own column with a "1/2",
+                                     "2/2" etc. badge in the header
+     2. Pack columns two at a time into slides
    ======================================================================== */
-/*
-   PACK TV SLIDES
 
-   Divides categories into slides according to
-   TV_ITEMS_PER_SLIDE.
-
-   menuLabel identifies the slide as:
-     FOOD MENU
-     or
-     DRINKS & BEVERAGES
-*/
-function packTVSlides(categories, menuLabel) {
-  const slides = [];
-  let current = [], count = 0;
+/* Build a flat list of column units from a list of categories. */
+function buildTVColumns(categories) {
+  const columns = [];
   categories.forEach(cat => {
-    if (count + cat.items.length > TV_ITEMS_PER_SLIDE && current.length > 0) {
-      slides.push({ label: menuLabel, categories: current });
-      current = []; count = 0;
+    const total = cat.items.length;
+    if (total <= TV_ROWS_PER_COLUMN) {
+      /* Fits in one column */
+      columns.push({
+        categoryName: cat.name,
+        items: cat.items,
+        isSplit: false
+      });
+    } else {
+      /* Split into chunks of TV_ROWS_PER_COLUMN rows */
+      const totalParts = Math.ceil(total / TV_ROWS_PER_COLUMN);
+      for (let p = 0; p < totalParts; p++) {
+        columns.push({
+          categoryName: cat.name,
+          items: cat.items.slice(p * TV_ROWS_PER_COLUMN, (p + 1) * TV_ROWS_PER_COLUMN),
+          isSplit: true,
+          partNum: p + 1,
+          totalParts: totalParts
+        });
+      }
     }
-    current.push(cat);
-    count += cat.items.length;
   });
-  if (current.length) slides.push({ label: menuLabel, categories: current });
+  return columns;
+}
+
+/* Pack the flat columns list into slides of exactly 2 columns. */
+function packTVSlides(categories, menuLabel) {
+  const columns = buildTVColumns(categories);
+  const slides = [];
+  for (let i = 0; i < columns.length; i += 2) {
+    slides.push({
+      label: menuLabel,
+      columns: columns.slice(i, i + 2)
+    });
+  }
   return slides;
 }
 
-/*
-   BUILD ONE TV SLIDE
-
-   Converts one prepared slide into HTML.
-
-   Each category becomes a column on the TV screen.
-*/
+/* Render a single TV slide's HTML. */
 function tvSlideHTML(slide) {
-  const cols = slide.categories.map(cat => {
-    const rows = cat.items.map(i => {
+  const cols = slide.columns.map(col => {
+    const rows = col.items.map(i => {
       const desc = i.description
         ? `<span class="tv-desc">${escapeHTML(i.description)}</span>` : '';
       return `<tr>
@@ -574,19 +473,22 @@ function tvSlideHTML(slide) {
         <td class="price">${formatPrice(i.price)}</td>
       </tr>`;
     }).join('');
-    return `<div class="cat-col"><h2>${escapeHTML(cat.name)}</h2><table><tbody>${rows}</tbody></table></div>`;
+
+    /* Header: category name + part badge if split */
+    const title = col.isSplit
+      ? `${escapeHTML(col.categoryName)} <span class="tv-part">${col.partNum}/${col.totalParts}</span>`
+      : escapeHTML(col.categoryName);
+
+    return `<div class="cat-col"><h2>${title}</h2><table><tbody>${rows}</tbody></table></div>`;
   }).join('');
-  const n = slide.categories.length;
-  return `<div class="slide" style="grid-template-columns:repeat(${n},1fr)">${cols}</div>`;
+
+  /* Always use 2 equal columns, even if only 1 column is present */
+  return `<div class="slide" style="grid-template-columns:repeat(2,1fr)">${cols}</div>`;
 }
 
 /* ========================================================================
-   TABS
+   TABS (mobile only)
    ======================================================================== */
-/*
-   SET UP TAB BUTTONS
-   Adds click events to the two menu buttons.
-*/
 function setupTabs() {
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -599,13 +501,8 @@ function setupTabs() {
 }
 
 /* ========================================================================
-   MUSIC
+   MUSIC (TV only)
    ======================================================================== */
-/*
-   SET UP TV MUSIC
-   Starts the background music when possible and also tries again
-   after the first user interaction.
-*/
 function setupMusic() {
   if (!isTV) return;
   const audio = document.getElementById('bgMusic');
@@ -628,18 +525,6 @@ function setupMusic() {
 
 /* ========================================================================
    FETCH + INIT
-   ========================================================================
-
-   IMPORTANT FOR FUTURE EDITING:
-   The restaurant menu items are NOT edited in this HTML file.
-   They come from the Google Apps Script API above.
-
-   The main settings you may want to change in this file are:
-     - TV_SLIDE_SECONDS
-     - TV_ITEMS_PER_SLIDE
-     - TV_AUTODETECT_WIDTH
-     - restaurant phone/location text
-     - TV background image
    ======================================================================== */
 fetch(API_URL)
   .then(r => {
@@ -647,17 +532,9 @@ fetch(API_URL)
     return r.json();
   })
   .then(items => {
-    /*
-       The API can return both food and drinks.
-       These two lines separate them using the "menu" field.
-    */
     const foodItems   = items.filter(i => i.menu === 'food');
     const drinksItems = items.filter(i => i.menu === 'drinks');
 
-    /*
-       TV MODE:
-       Prepare categories and rotating slides.
-    */
     if (isTV) {
       const foodCats   = groupByCategory(foodItems);
       const drinksCats = groupByCategory(drinksItems);
@@ -690,10 +567,6 @@ fetch(API_URL)
       setInterval(() => { i = (i + 1) % slides.length; show(i); },
                   TV_SLIDE_SECONDS * 1000);
       setupMusic();
-    /*
-       MOBILE MODE:
-       Build the normal food and drinks menu cards.
-    */
     } else {
       document.getElementById('food-grid').innerHTML =
         buildMobileCards(groupByCategory(foodItems));
@@ -702,11 +575,6 @@ fetch(API_URL)
       setupTabs();
     }
   })
-  /*
-       ERROR HANDLING
-       If the API cannot be reached or returns invalid data,
-       replace the loading messages with a simple refresh message.
-  */
   .catch(err => {
     document.querySelectorAll('.loading').forEach(el =>
       el.textContent = 'Could not load menu. Please refresh.');
