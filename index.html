@@ -78,6 +78,15 @@
     font-weight: 600; font-size: 0.95rem;
   }
   body.mobile-mode .location-contact i { margin-right: 6px; color: #ff7e2e; }
+  body.mobile-mode .location-contact a,
+  body.mobile-mode .note-extra a {
+    color: inherit;
+    text-decoration: none;
+  }
+  body.mobile-mode .location-contact a:hover,
+  body.mobile-mode .note-extra a:hover {
+    text-decoration: underline;
+  }
   body.mobile-mode .tagline { font-size: 0.9rem; margin-top: 10px; color: #2c6d91; font-weight: 500; }
   body.mobile-mode .tab-buttons {
     display: flex; flex-wrap: wrap; gap: 12px;
@@ -231,6 +240,10 @@
     text-shadow: 0 2px 6px rgba(0,0,0,0.6);
   }
   body.tv-mode .tv-header .contact i { color: #ff914d; margin-right: 0.4vw; }
+  body.tv-mode .tv-header .contact a {
+    color: inherit;
+    text-decoration: none;
+  }
   body.tv-mode .menu-badge {
     display: inline-block; background: #ff914d; color: #05131c;
     font-weight: 800; padding: 0.6vh 1.4vw; border-radius: 60px;
@@ -324,7 +337,7 @@
     <!-- Restaurant location and phone number shown in the mobile header -->
     <div class="location-contact">
       <span><i class="fas fa-location-dot"></i> A.Dh Fenfushi, Maldives</span>
-      <span><i class="fas fa-phone-alt"></i> +960 7555990</span>
+      <span><i class="fas fa-phone-alt"></i> <a href="tel:+9607555990">+960 7555990</a></span>
     </div>
     <div class="tagline"><i class="fas fa-leaf"></i> Authentic Flavours | Fresh Ingredients | Takeaway Available</div>
   </div>
@@ -339,7 +352,7 @@
   -->
   <div id="food-tab" class="tab-content active-tab">
     <div class="category-grid" id="food-grid"><div class="loading">Loading menu…</div></div>
-    <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: 7555990</span></div>
+    <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: <a href="tel:+9607555990">7555990</a></span></div>
   </div>
 
   <!-- DRINKS MENU CONTAINER
@@ -347,7 +360,7 @@
   -->
   <div id="drinks-tab" class="tab-content">
     <div class="category-grid" id="drinks-grid"><div class="loading">Loading menu…</div></div>
-    <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: 7555990</span></div>
+    <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: <a href="tel:+9607555990">7555990</a></span></div>
   </div>
 
   <footer><i class="fas fa-heart" style="color:#f45b2e;"></i> Masala Corner – A.Dh Fenfushi, Maldives | All prices in MVR</footer>
@@ -369,7 +382,7 @@
     <h1><i class="fas fa-utensils"></i> MASALA CORNER</h1>
     <div class="contact">
       <div><i class="fas fa-location-dot"></i> A.Dh Fenfushi, Maldives</div>
-      <div><i class="fas fa-phone-alt"></i> Order: 7555990</div>
+      <div><i class="fas fa-phone-alt"></i> Order: <a href="tel:+9607555990">7555990</a></div>
     </div>
   </div>
   <!--
@@ -390,6 +403,11 @@
   <div class="progress" id="progress"></div>
 </div>
 
+<!--
+     TV background music.
+     The browser may block automatic audio until the first user interaction.
+     The JavaScript below tries to handle that limitation.
+-->
 <audio id="bgMusic" loop preload="auto">
   <source src="music.mp3" type="audio/mpeg">
 </audio>
@@ -398,18 +416,24 @@
 /* ========================================================================
    CONFIG
    ======================================================================== */
-/* Google Apps Script API providing the menu data. */
+/* Google Apps Script API providing the menu data.
+   Keep this URL unchanged unless the Google Apps Script is replaced. */
 const API_URL = 'https://script.google.com/macros/s/AKfycby48ltyZglhe5XCC8ESGXglugIx4gtXkbF6pT6T5PRsd06mdDVLIC2nBvK4FTvV6NkM/exec';
 /* How long each TV slide is displayed, in seconds. */
 const TV_SLIDE_SECONDS = 18;
 /* Target number of menu items per TV slide. */
 const TV_ITEMS_PER_SLIDE = 7;
-/* Browser width at which TV mode is automatically selected. */
+/* Browser width at which TV mode is automatically selected.
+   Example: 1200 means screens 1200px wide or larger use TV mode. */
 const TV_AUTODETECT_WIDTH = 1200;
 
 /* ========================================================================
    MODE DETECTION
    ======================================================================== */
+/* Optional manual mode:
+   ?mode=tv     -> force TV mode
+   ?mode=mobile -> force mobile/web mode
+   Without a mode, the screen width decides automatically. */
 const params = new URLSearchParams(location.search);
 const forcedMode = params.get('mode');
 const isTV = forcedMode === 'tv' ||
@@ -491,7 +515,7 @@ function buildMobileCards(categories) {
       <div class="menu-card">
         <div class="card-header">
           <h2>${escapeHTML(cat.name)}</h2>
-          ${cat.image ? `<img src="${cat.image}" class="category-img" loading="lazy" alt="">` : ''}
+          ${cat.image ? `<img src="${cat.image}" class="category-img" loading="lazy" alt="${escapeHTML(cat.name)}">` : ''}
         </div>
         <div class="menu-table-wrapper">
           <table class="menu-table">
@@ -604,9 +628,24 @@ function setupMusic() {
 
 /* ========================================================================
    FETCH + INIT
+   ========================================================================
+
+   IMPORTANT FOR FUTURE EDITING:
+   The restaurant menu items are NOT edited in this HTML file.
+   They come from the Google Apps Script API above.
+
+   The main settings you may want to change in this file are:
+     - TV_SLIDE_SECONDS
+     - TV_ITEMS_PER_SLIDE
+     - TV_AUTODETECT_WIDTH
+     - restaurant phone/location text
+     - TV background image
    ======================================================================== */
 fetch(API_URL)
-  .then(r => r.json())
+  .then(r => {
+    if (!r.ok) throw new Error('Menu API returned HTTP ' + r.status);
+    return r.json();
+  })
   .then(items => {
     /*
        The API can return both food and drinks.
