@@ -4,22 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Masala Corner | Menu</title>
+
+<!-- Font Awesome: gives us the icons (fork, phone, etc.) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <style>
+  /* ====================================================================
+     GLOBAL RESET
+     Removes default browser spacing so everything starts clean.
+     ==================================================================== */
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  /* Base body styling used by BOTH mobile and TV views. */
   body {
     font-family: 'Segoe UI', 'Poppins', 'Roboto', system-ui, sans-serif;
     color: #023859;
     min-height: 100vh;
   }
+
+  /* Message shown while menu data is loading, or if it fails. */
   .loading { text-align: center; padding: 3rem; color: #2c6d91; font-weight: 600; }
 
-  /* ===================== MOBILE ===================== */
+  /* ====================================================================
+     MOBILE VIEW (default when screen width < 1200px, or ?mode=mobile)
+     Design: light blue gradient, white card, Food / Drinks tabs.
+     ==================================================================== */
   body.mobile-mode {
     background: linear-gradient(135deg, #cce7ff 0%, #a8d4fc 100%);
     padding: 2rem 1.2rem;
   }
+
+  /* Big white rounded container that holds the whole mobile menu. */
   body.mobile-mode .menu-wrapper {
     max-width: 1500px; margin: 0 auto;
     background: rgba(255,255,255,0.94);
@@ -27,18 +42,24 @@
     box-shadow: 0 20px 40px rgba(0,30,50,0.2);
     padding: 1.5rem 1.8rem 2rem 1.8rem;
   }
+
+  /* Top header area with restaurant name. */
   body.mobile-mode .resto-header {
     text-align: center; margin-bottom: 1.8rem;
     border-bottom: 2px solid #7bc3f0; padding-bottom: 1rem;
   }
   body.mobile-mode .resto-header h1 {
     font-size: 2.8rem;
+    /* Gradient text effect on the restaurant name. */
     background: linear-gradient(120deg, #02658b, #2a85b5);
     -webkit-background-clip: text; background-clip: text; color: transparent;
     display: inline-flex; align-items: center; gap: 12px;
     flex-wrap: wrap; justify-content: center;
   }
+  /* Icons inside the title keep their orange color (not gradient). */
   body.mobile-mode .resto-header h1 i { color: #ff914d; -webkit-text-fill-color: #ff914d; }
+
+  /* Location + phone pill under the restaurant name. */
   body.mobile-mode .location-contact {
     background: #e3f2fdcc; display: inline-flex; flex-wrap: wrap;
     justify-content: center; gap: 1.8rem; margin-top: 12px;
@@ -46,33 +67,48 @@
     font-weight: 600; font-size: 0.95rem;
   }
   body.mobile-mode .location-contact i { margin-right: 6px; color: #ff7e2e; }
+
+  /* Tagline under the contact info. */
   body.mobile-mode .tagline { font-size: 0.9rem; margin-top: 10px; color: #2c6d91; font-weight: 500; }
+
+  /* Container for the FOOD MENU / DRINKS tabs. */
   body.mobile-mode .tab-buttons {
     display: flex; flex-wrap: wrap; gap: 12px;
     justify-content: center; margin: 1.5rem 0;
   }
+  /* Individual tab button (unselected state). */
   body.mobile-mode .tab-btn {
     background: #e3f2fd; border: none; padding: 12px 28px;
     font-size: 1.1rem; font-weight: 700; border-radius: 50px;
     cursor: pointer; transition: all 0.2s; color: #02658b;
     display: inline-flex; align-items: center; gap: 10px;
   }
+  /* Selected tab button (highlighted blue). */
   body.mobile-mode .tab-btn.active {
     background: #2f95cf; color: white;
     box-shadow: 0 4px 12px rgba(47,149,207,0.4);
   }
+
+  /* Tab content panels are hidden by default. */
   body.mobile-mode .tab-content { display: none; animation: fadeIn 0.3s ease; }
+  /* Only the active tab panel is shown. */
   body.mobile-mode .tab-content.active-tab { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+
+  /* Grid that lays out the category cards side by side. */
   body.mobile-mode .category-grid {
     display: flex; flex-wrap: wrap; gap: 1.8rem; margin-top: 1.2rem;
   }
+
+  /* One white card per category (SALAD, SOUP, WATER...). */
   body.mobile-mode .menu-card {
     background: #ffffffec; border-radius: 1.8rem;
     box-shadow: 0 8px 18px rgba(0,40,60,0.08);
     flex: 1 1 360px; overflow: hidden;
     border: 1px solid rgba(255,255,240,0.8);
   }
+
+  /* Blue header bar at the top of each card (category name + image). */
   body.mobile-mode .card-header {
     background: #2f95cfdd; padding: 0.8rem 1.3rem;
     border-left: 8px solid #ffbe76;
@@ -83,11 +119,17 @@
     font-size: 1.5rem; font-weight: 700; color: white;
     display: flex; align-items: center; gap: 12px;
   }
+
+  /* Small square image shown next to the category name. */
   body.mobile-mode .category-img {
     width: 70px; height: 70px; object-fit: cover;
     border-radius: 16px; border: 2px solid #fff;
   }
+
+  /* Wrapper allows the table to scroll horizontally on tiny screens. */
   body.mobile-mode .menu-table-wrapper { overflow-x: auto; padding: 0.6rem 0.8rem 1rem 0.8rem; }
+
+  /* The actual table of items. */
   body.mobile-mode .menu-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
   body.mobile-mode .menu-table th {
     text-align: left; padding: 8px 6px; color: #1c6d97;
@@ -97,31 +139,47 @@
   body.mobile-mode .menu-table td {
     padding: 9px 6px; border-bottom: 1px solid #e1f0fe; vertical-align: top;
   }
+
+  /* Little pill-shaped cell that shows the item code (e.g. 1001). */
   body.mobile-mode .code-cell {
     font-weight: 700; color: #ca6d2e; background: #fef5ea;
     width: 65px; text-align: center; border-radius: 30px;
     font-size: 0.75rem; font-family: monospace;
   }
+
+  /* Dish name. */
   body.mobile-mode .item-name { font-weight: 600; color: #01415e; display: block; }
+
+  /* Small italic description under the dish name. */
   body.mobile-mode .item-desc {
     font-size: 0.72rem; color: #5a7b8f; font-weight: 400;
     margin-top: 2px; line-height: 1.3; font-style: italic;
   }
+
+  /* Orange price pill on the right side. */
   body.mobile-mode .price {
     text-align: right; font-weight: 800; color: #d45a1e;
     background: #fff2e8; padding: 4px 10px; border-radius: 40px;
     white-space: nowrap;
   }
+
+  /* Bottom strip inside each tab, with the order phone number. */
   body.mobile-mode .note-extra {
     background: #fff6e8; margin-top: 2rem; border-radius: 1.5rem;
     padding: 0.7rem 1.5rem; display: flex; flex-wrap: wrap;
     justify-content: space-between; align-items: center;
     font-size: 0.8rem; font-weight: 500;
   }
+
+  /* Footer at the bottom of the mobile page. */
   body.mobile-mode footer {
     text-align: center; margin-top: 28px; font-size: 0.7rem;
     color: #22668d; border-top: 1px solid #bbdef5; padding-top: 18px;
   }
+
+  /* ====================================================================
+     MOBILE — small phone adjustments (narrower than 750px)
+     ==================================================================== */
   @media (max-width: 750px) {
     body.mobile-mode { padding: 1rem; }
     body.mobile-mode .resto-header h1 { font-size: 2rem; }
@@ -131,14 +189,18 @@
     body.mobile-mode .item-desc { font-size: 0.68rem; }
   }
 
-  /* ===================== TV ===================== */
+  /* ====================================================================
+     TV VIEW (activated when screen width >= 1200px, or ?mode=tv)
+     Design: dark theme, big text, slideshow of categories, background image.
+     ==================================================================== */
   body.tv-mode {
     background: #05131c;
     color: #e8f4fb;
-    overflow: hidden;
+    overflow: hidden; /* no scrolling on TV — everything fits on screen */
     height: 100vh;
   }
-  /* TV background image with dark overlay */
+
+  /* Full-screen background image with a dark overlay so text is readable. */
   body.tv-mode::before {
     content: "";
     position: fixed;
@@ -150,13 +212,19 @@
     background-position: center;
     background-repeat: no-repeat;
     z-index: -1;
-    filter: blur(1px);
+    filter: blur(1px); /* subtle blur for a soft look */
   }
+
+  /* Hide the mobile layout entirely in TV mode. */
   body.tv-mode .menu-wrapper { display: none; }
+
+  /* Outer TV frame. */
   body.tv-mode .tv-frame {
     display: flex; flex-direction: column;
     height: 100vh; padding: 2.5vh 2.5vw;
   }
+
+  /* Top bar on TV with restaurant name + contact info. */
   body.tv-mode .tv-header {
     display: flex; justify-content: space-between; align-items: center;
     border-bottom: 3px solid #ff914d; padding-bottom: 1.2vh; margin-bottom: 1.5vh;
@@ -172,19 +240,27 @@
     text-shadow: 0 2px 6px rgba(0,0,0,0.6);
   }
   body.tv-mode .tv-header .contact i { color: #ff914d; margin-right: 0.4vw; }
+
+  /* Small orange badge showing which menu is currently on screen. */
   body.tv-mode .menu-badge {
     display: inline-block; background: #ff914d; color: #05131c;
     font-weight: 800; padding: 0.6vh 1.4vw; border-radius: 60px;
     font-size: 1.8vh; letter-spacing: 1px; margin-bottom: 1.2vh;
     box-shadow: 0 4px 14px rgba(255,145,77,0.4);
   }
+
+  /* Container that holds all slides stacked on top of each other. */
   body.tv-mode .slide-wrap { flex: 1; position: relative; }
+
+  /* A single slide — hidden by default, faded in when active. */
   body.tv-mode .slide {
     position: absolute; inset: 0;
     display: grid; gap: 1.4vw;
     opacity: 0; transition: opacity 0.9s ease;
   }
   body.tv-mode .slide.active { opacity: 1; }
+
+  /* One column inside a slide (one category). Frosted-glass panel. */
   body.tv-mode .cat-col {
     background: rgba(10, 30, 45, 0.72);
     backdrop-filter: blur(6px);
@@ -195,6 +271,8 @@
     display: flex; flex-direction: column; overflow: hidden;
     box-shadow: 0 8px 30px rgba(0,0,0,0.45);
   }
+
+  /* Category name at the top of each TV column. */
   body.tv-mode .cat-col h2 {
     font-size: 2.4vh; color: #ffbe76;
     text-transform: uppercase; letter-spacing: 1.5px;
@@ -203,31 +281,39 @@
     display: flex; align-items: center; gap: 0.6vw;
     text-shadow: 0 2px 6px rgba(0,0,0,0.5);
   }
+
+  /* Table of items inside each TV column. */
   body.tv-mode .cat-col table { width: 100%; border-collapse: collapse; }
   body.tv-mode .cat-col td {
     padding: 0.9vh 0; font-size: 1.9vh;
     border-bottom: 1px solid rgba(123,213,255,0.1);
     vertical-align: top;
   }
+  /* Item code (e.g. 1001) on the left of each row. */
   body.tv-mode .cat-col td.code {
     color: #7bd5ff; font-family: monospace; font-weight: 700;
     width: 3.5vw; font-size: 1.6vh;
   }
   body.tv-mode .cat-col td.item-cell { color: #f0f8ff; }
+  /* Dish name — bold. */
   body.tv-mode .cat-col .tv-item {
     font-weight: 700; display: block;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
+  /* Small description under the dish name. */
   body.tv-mode .cat-col .tv-desc {
     font-size: 1.35vh; color: #a7c9dd; font-weight: 400;
     display: block; margin-top: 0.2vh; line-height: 1.25;
     font-style: italic;
   }
+  /* Price on the right of each row. */
   body.tv-mode .cat-col td.price {
     color: #ffbe76; font-weight: 800; text-align: right;
     white-space: nowrap; padding-left: 0.8vw;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
+
+  /* Row of dots at the bottom showing which slide is currently shown. */
   body.tv-mode .progress {
     display: flex; gap: 6px; justify-content: center; margin-top: 1.5vh;
   }
@@ -235,19 +321,26 @@
     width: 8px; height: 8px; border-radius: 50%;
     background: rgba(123,213,255,0.25); transition: all 0.3s;
   }
+  /* Active dot is elongated and orange. */
   body.tv-mode .progress span.on {
     background: #ff914d; width: 28px; border-radius: 6px;
   }
   body.tv-mode .tv-frame .loading { color: #7bd5ff; font-size: 2.5vh; }
 
+  /* Hide the TV layout by default. Only show it in tv-mode. */
   .tv-frame { display: none; }
   body.tv-mode .tv-frame { display: flex; }
 </style>
 </head>
 <body>
 
-<!-- ============ MOBILE LAYOUT ============ -->
+<!-- ====================================================================
+     MOBILE LAYOUT
+     Shown on phones (small screens) or when URL has ?mode=mobile
+     ==================================================================== -->
 <div class="menu-wrapper">
+
+  <!-- Restaurant name + location + phone + tagline -->
   <div class="resto-header">
     <h1><i class="fas fa-utensils"></i> MASALA CORNER <i class="fas fa-pepper-hot"></i></h1>
     <div class="location-contact">
@@ -257,16 +350,19 @@
     <div class="tagline"><i class="fas fa-leaf"></i> Authentic Flavours | Fresh Ingredients | Takeaway Available</div>
   </div>
 
+  <!-- Two tabs: FOOD MENU and DRINKS & BEVERAGES -->
   <div class="tab-buttons">
     <button class="tab-btn active" data-tab="food"><i class="fas fa-utensils"></i> FOOD MENU</button>
     <button class="tab-btn" data-tab="drinks"><i class="fas fa-mug-hot"></i> DRINKS & BEVERAGES</button>
   </div>
 
+  <!-- FOOD tab — filled in by JavaScript from the Google Sheet data -->
   <div id="food-tab" class="tab-content active-tab">
     <div class="category-grid" id="food-grid"><div class="loading">Loading menu…</div></div>
     <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: 7555990</span></div>
   </div>
 
+  <!-- DRINKS tab — filled in by JavaScript from the Google Sheet data -->
   <div id="drinks-tab" class="tab-content">
     <div class="category-grid" id="drinks-grid"><div class="loading">Loading menu…</div></div>
     <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: 7555990</span></div>
@@ -275,8 +371,12 @@
   <footer><i class="fas fa-heart" style="color:#f45b2e;"></i> Masala Corner – A.Dh Fenfushi, Maldives | All prices in MVR</footer>
 </div>
 
-<!-- ============ TV LAYOUT ============ -->
+<!-- ====================================================================
+     TV LAYOUT
+     Shown on large screens (>= 1200px) or when URL has ?mode=tv
+     ==================================================================== -->
 <div class="tv-frame">
+  <!-- Top bar with restaurant name + contact -->
   <div class="tv-header">
     <h1><i class="fas fa-utensils"></i> MASALA CORNER</h1>
     <div class="contact">
@@ -284,43 +384,73 @@
       <div><i class="fas fa-phone-alt"></i> Order: 7555990</div>
     </div>
   </div>
+
+  <!-- Badge that says FOOD MENU or DRINKS & BEVERAGES for the current slide -->
   <div><span class="menu-badge" id="badge">FOOD MENU</span></div>
+
+  <!-- All slides get injected here by JavaScript -->
   <div class="slide-wrap" id="slideWrap"><div class="loading">Loading menu…</div></div>
+
+  <!-- Dots that show which slide is on screen -->
   <div class="progress" id="progress"></div>
 </div>
 
+<!-- Background music for the TV (looped). Only plays in TV mode.
+     Put a file named music.mp3 next to index.html if you want sound. -->
 <audio id="bgMusic" loop preload="auto">
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 /* ========================================================================
-   CONFIG
+   CONFIG — the main settings you might want to change
    ======================================================================== */
+
+/* The Google Apps Script Web App URL that returns the menu as JSON.
+   Replace this if you redeploy the script and get a new URL. */
 const API_URL = 'https://script.google.com/macros/s/AKfycby48ltyZglhe5XCC8ESGXglugIx4gtXkbF6pT6T5PRsd06mdDVLIC2nBvK4FTvV6NkM/exec';
+
+/* How long each TV slide stays on screen (seconds). */
 const TV_SLIDE_SECONDS = 18;
+
+/* Max number of items to fit on a single TV slide. When exceeded,
+   a new slide is created. Lower = bigger text, more slides. */
 const TV_ITEMS_PER_SLIDE = 7;
+
+/* On screens wider than this, we automatically pick TV mode. */
 const TV_AUTODETECT_WIDTH = 1200;
 
 /* ========================================================================
-   MODE DETECTION
+   MODE DETECTION — decide between mobile and TV layout
    ======================================================================== */
+
+/* Read the ?mode= query string from the URL (e.g. ?mode=tv). */
 const params = new URLSearchParams(location.search);
 const forcedMode = params.get('mode');
+
+/* If ?mode=tv → always TV.
+   If ?mode=mobile → always mobile.
+   Otherwise → pick TV if the screen is wide, else mobile. */
 const isTV = forcedMode === 'tv' ||
              (forcedMode !== 'mobile' && window.innerWidth >= TV_AUTODETECT_WIDTH);
+
+/* Add the correct class to <body> so CSS knows which layout to use. */
 document.body.classList.add(isTV ? 'tv-mode' : 'mobile-mode');
 document.title = 'Masala Corner | ' + (isTV ? 'TV Menu' : 'Menu');
 
 /* ========================================================================
-   HELPERS
+   HELPERS — small utility functions used later
    ======================================================================== */
+
+/* Turn "36" into "MVR 36". If it's already got "MVR", leave it alone. */
 function formatPrice(p) {
   if (!p) return '';
   const s = String(p).trim();
   return /^mvr/i.test(s) ? s.toUpperCase() : 'MVR ' + s;
 }
 
+/* Escape special characters so a dish name like "Fish & Chips <L>" 
+   can't break the HTML. */
 function escapeHTML(s) {
   return String(s)
     .replace(/&/g, '&amp;')
@@ -328,6 +458,8 @@ function escapeHTML(s) {
     .replace(/>/g, '&gt;');
 }
 
+/* Take a flat list of items and group them by category.
+   Result: [{ name:'SALAD', image:'...', items:[...] }, ...] */
 function groupByCategory(items) {
   const list = [], map = {};
   items.forEach(i => {
@@ -341,11 +473,13 @@ function groupByCategory(items) {
 }
 
 /* ========================================================================
-   MOBILE RENDER
+   MOBILE RENDER — builds the HTML for each category card
    ======================================================================== */
 function buildMobileCards(categories) {
   if (!categories.length) return '<div class="loading">No items yet.</div>';
+
   return categories.map(cat => {
+    /* One <tr> per dish. */
     const rows = cat.items.map(i => {
       const desc = i.description
         ? `<span class="item-desc">${escapeHTML(i.description)}</span>` : '';
@@ -355,6 +489,8 @@ function buildMobileCards(categories) {
         <td class="price">${formatPrice(i.price)}</td>
       </tr>`;
     }).join('');
+
+    /* The full category card (header + table). */
     return `
       <div class="menu-card">
         <div class="card-header">
@@ -372,12 +508,17 @@ function buildMobileCards(categories) {
 }
 
 /* ========================================================================
-   TV RENDER
+   TV RENDER — pack categories into slides and build the HTML
    ======================================================================== */
+
+/* Split a list of categories into slides so that no slide has more than
+   TV_ITEMS_PER_SLIDE items. Keeps the menu readable on TV. */
 function packTVSlides(categories, menuLabel) {
   const slides = [];
   let current = [], count = 0;
+
   categories.forEach(cat => {
+    /* If adding this category would overflow, start a new slide first. */
     if (count + cat.items.length > TV_ITEMS_PER_SLIDE && current.length > 0) {
       slides.push({ label: menuLabel, categories: current });
       current = []; count = 0;
@@ -385,10 +526,13 @@ function packTVSlides(categories, menuLabel) {
     current.push(cat);
     count += cat.items.length;
   });
+
+  /* Don't forget the last slide. */
   if (current.length) slides.push({ label: menuLabel, categories: current });
   return slides;
 }
 
+/* Build the HTML for a single TV slide. Each category becomes a column. */
 function tvSlideHTML(slide) {
   const cols = slide.categories.map(cat => {
     const rows = cat.items.map(i => {
@@ -402,18 +546,23 @@ function tvSlideHTML(slide) {
     }).join('');
     return `<div class="cat-col"><h2>${escapeHTML(cat.name)}</h2><table><tbody>${rows}</tbody></table></div>`;
   }).join('');
+
+  /* Number of columns = number of categories in this slide. */
   const n = slide.categories.length;
   return `<div class="slide" style="grid-template-columns:repeat(${n},1fr)">${cols}</div>`;
 }
 
 /* ========================================================================
-   TABS
+   TABS — makes the FOOD / DRINKS buttons clickable on mobile
    ======================================================================== */
 function setupTabs() {
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      /* Remove "active" from all buttons, then add it to the clicked one. */
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+
+      /* Hide all tab panels, then show the one matching the clicked button. */
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
       document.getElementById(btn.dataset.tab + '-tab').classList.add('active-tab');
     });
@@ -421,20 +570,25 @@ function setupTabs() {
 }
 
 /* ========================================================================
-   MUSIC
+   MUSIC — plays the background track on TV only
    ======================================================================== */
 function setupMusic() {
-  if (!isTV) return;
+  if (!isTV) return;                     /* mobile has no music */
   const audio = document.getElementById('bgMusic');
   if (!audio) return;
-  audio.volume = 0.25;
-  audio.muted = true;
+
+  audio.volume = 0.25;                   /* quiet background level */
+  audio.muted = true;                    /* start muted — browsers block autoplay with sound */
+
+  /* Try to start playback (muted). If it succeeds, we then try to unmute. */
   const tryPlay = () => {
     audio.play().then(() => {
       setTimeout(() => { audio.muted = false; }, 800);
     }).catch(() => {});
   };
   tryPlay();
+
+  /* On the first user click/tap/keypress, unmute for sure. */
   ['click','touchstart','keydown'].forEach(evt =>
     document.addEventListener(evt, () => {
       audio.muted = false;
@@ -444,35 +598,49 @@ function setupMusic() {
 }
 
 /* ========================================================================
-   FETCH + INIT
+   FETCH + INIT — load menu data and render the correct layout
    ======================================================================== */
+
 fetch(API_URL)
   .then(r => r.json())
   .then(items => {
+    /* Split items by which menu they belong to. */
     const foodItems   = items.filter(i => i.menu === 'food');
     const drinksItems = items.filter(i => i.menu === 'drinks');
 
     if (isTV) {
+      /* ---------- TV MODE ---------- */
       const foodCats   = groupByCategory(foodItems);
       const drinksCats = groupByCategory(drinksItems);
+
+      /* Pack all food slides first, then all drinks slides. */
       const slides = [
         ...packTVSlides(foodCats,   'FOOD MENU'),
         ...packTVSlides(drinksCats, 'DRINKS & BEVERAGES')
       ];
+
       if (!slides.length) {
         document.getElementById('slideWrap').innerHTML =
           '<div class="loading">No items in menu.</div>';
         return;
       }
+
+      /* Inject all slides into the DOM. */
       const wrap = document.getElementById('slideWrap');
       wrap.innerHTML = slides.map(tvSlideHTML).join('');
+
+      /* Grab references we'll need for the slideshow. */
       const slideEls = wrap.querySelectorAll('.slide');
       const badge = document.getElementById('badge');
       const progress = document.getElementById('progress');
+
+      /* Build one progress dot per slide. */
       progress.innerHTML = slides.map(() => '<span></span>').join('');
       const dots = progress.querySelectorAll('span');
 
       let i = 0;
+
+      /* Show slide #idx and hide all others. */
       function show(idx) {
         slideEls.forEach(el => el.classList.remove('active'));
         dots.forEach(d => d.classList.remove('on'));
@@ -480,11 +648,16 @@ fetch(API_URL)
         dots[idx].classList.add('on');
         badge.textContent = slides[idx].label;
       }
+
       show(0);
+      /* Auto-advance to the next slide every TV_SLIDE_SECONDS. */
       setInterval(() => { i = (i + 1) % slides.length; show(i); },
                   TV_SLIDE_SECONDS * 1000);
+
       setupMusic();
+
     } else {
+      /* ---------- MOBILE MODE ---------- */
       document.getElementById('food-grid').innerHTML =
         buildMobileCards(groupByCategory(foodItems));
       document.getElementById('drinks-grid').innerHTML =
@@ -493,6 +666,7 @@ fetch(API_URL)
     }
   })
   .catch(err => {
+    /* If the API call fails, show a friendly message instead of a blank page. */
     document.querySelectorAll('.loading').forEach(el =>
       el.textContent = 'Could not load menu. Please refresh.');
     console.error(err);
