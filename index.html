@@ -95,14 +95,18 @@
     font-size: 0.8rem; text-transform: uppercase;
   }
   body.mobile-mode .menu-table td {
-    padding: 9px 6px; border-bottom: 1px solid #e1f0fe; vertical-align: middle;
+    padding: 9px 6px; border-bottom: 1px solid #e1f0fe; vertical-align: top;
   }
   body.mobile-mode .code-cell {
     font-weight: 700; color: #ca6d2e; background: #fef5ea;
     width: 65px; text-align: center; border-radius: 30px;
     font-size: 0.75rem; font-family: monospace;
   }
-  body.mobile-mode .item-name { font-weight: 600; color: #01415e; }
+  body.mobile-mode .item-name { font-weight: 600; color: #01415e; display: block; }
+  body.mobile-mode .item-desc {
+    font-size: 0.72rem; color: #5a7b8f; font-weight: 400;
+    margin-top: 2px; line-height: 1.3; font-style: italic;
+  }
   body.mobile-mode .price {
     text-align: right; font-weight: 800; color: #d45a1e;
     background: #fff2e8; padding: 4px 10px; border-radius: 40px;
@@ -124,14 +128,29 @@
     body.mobile-mode .card-header h2 { font-size: 1.3rem; }
     body.mobile-mode .category-img { width: 55px; height: 55px; }
     body.mobile-mode .tab-btn { padding: 8px 18px; font-size: 0.9rem; }
+    body.mobile-mode .item-desc { font-size: 0.68rem; }
   }
 
   /* ===================== TV ===================== */
   body.tv-mode {
-    background: radial-gradient(ellipse at top, #0f2b3d 0%, #05131c 100%);
+    background: #05131c;
     color: #e8f4fb;
     overflow: hidden;
     height: 100vh;
+  }
+  /* TV background image with dark overlay */
+  body.tv-mode::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(5, 19, 28, 0.82), rgba(5, 19, 28, 0.92)),
+      url('YOUR_TV_BACKGROUND_IMAGE_URL');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    filter: blur(1px);
   }
   body.tv-mode .menu-wrapper { display: none; }
   body.tv-mode .tv-frame {
@@ -149,13 +168,15 @@
     display: flex; align-items: center; gap: 1vw;
   }
   body.tv-mode .tv-header .contact {
-    font-size: 1.9vh; color: #a7d8f0; font-weight: 500; text-align: right;
+    font-size: 1.9vh; color: #cbe7f7; font-weight: 500; text-align: right;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
   }
   body.tv-mode .tv-header .contact i { color: #ff914d; margin-right: 0.4vw; }
   body.tv-mode .menu-badge {
     display: inline-block; background: #ff914d; color: #05131c;
     font-weight: 800; padding: 0.6vh 1.4vw; border-radius: 60px;
     font-size: 1.8vh; letter-spacing: 1px; margin-bottom: 1.2vh;
+    box-shadow: 0 4px 14px rgba(255,145,77,0.4);
   }
   body.tv-mode .slide-wrap { flex: 1; position: relative; }
   body.tv-mode .slide {
@@ -165,33 +186,47 @@
   }
   body.tv-mode .slide.active { opacity: 1; }
   body.tv-mode .cat-col {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(123,213,255,0.18);
+    background: rgba(10, 30, 45, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(123,213,255,0.22);
     border-radius: 1.2rem;
     padding: 1.6vh 1.4vw;
     display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
   }
   body.tv-mode .cat-col h2 {
-    font-size: 2.6vh; color: #ffbe76;
+    font-size: 2.4vh; color: #ffbe76;
     text-transform: uppercase; letter-spacing: 1.5px;
     border-bottom: 2px solid rgba(255,190,118,0.3);
     padding-bottom: 0.8vh; margin-bottom: 1vh;
     display: flex; align-items: center; gap: 0.6vw;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
   }
   body.tv-mode .cat-col table { width: 100%; border-collapse: collapse; }
   body.tv-mode .cat-col td {
-    padding: 0.9vh 0; font-size: 2vh;
-    border-bottom: 1px solid rgba(123,213,255,0.08);
-    vertical-align: middle;
+    padding: 0.9vh 0; font-size: 1.9vh;
+    border-bottom: 1px solid rgba(123,213,255,0.1);
+    vertical-align: top;
   }
   body.tv-mode .cat-col td.code {
     color: #7bd5ff; font-family: monospace; font-weight: 700;
-    width: 3.5vw; font-size: 1.7vh;
+    width: 3.5vw; font-size: 1.6vh;
   }
-  body.tv-mode .cat-col td.item { color: #e8f4fb; font-weight: 600; }
+  body.tv-mode .cat-col td.item-cell { color: #f0f8ff; }
+  body.tv-mode .cat-col .tv-item {
+    font-weight: 700; display: block;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+  body.tv-mode .cat-col .tv-desc {
+    font-size: 1.35vh; color: #a7c9dd; font-weight: 400;
+    display: block; margin-top: 0.2vh; line-height: 1.25;
+    font-style: italic;
+  }
   body.tv-mode .cat-col td.price {
     color: #ffbe76; font-weight: 800; text-align: right;
     white-space: nowrap; padding-left: 0.8vw;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
   body.tv-mode .progress {
     display: flex; gap: 6px; justify-content: center; margin-top: 1.5vh;
@@ -264,7 +299,7 @@
    ======================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycby48ltyZglhe5XCC8ESGXglugIx4gtXkbF6pT6T5PRsd06mdDVLIC2nBvK4FTvV6NkM/exec';
 const TV_SLIDE_SECONDS = 18;
-const TV_ITEMS_PER_SLIDE = 8;
+const TV_ITEMS_PER_SLIDE = 7;
 const TV_AUTODETECT_WIDTH = 1200;
 
 /* ========================================================================
@@ -286,6 +321,13 @@ function formatPrice(p) {
   return /^mvr/i.test(s) ? s.toUpperCase() : 'MVR ' + s;
 }
 
+function escapeHTML(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 function groupByCategory(items) {
   const list = [], map = {};
   items.forEach(i => {
@@ -304,13 +346,19 @@ function groupByCategory(items) {
 function buildMobileCards(categories) {
   if (!categories.length) return '<div class="loading">No items yet.</div>';
   return categories.map(cat => {
-    const rows = cat.items.map(i =>
-      `<tr><td class="code-cell">${i.code}</td><td class="item-name">${i.item}</td><td class="price">${formatPrice(i.price)}</td></tr>`
-    ).join('');
+    const rows = cat.items.map(i => {
+      const desc = i.description
+        ? `<span class="item-desc">${escapeHTML(i.description)}</span>` : '';
+      return `<tr>
+        <td class="code-cell">${escapeHTML(i.code)}</td>
+        <td><span class="item-name">${escapeHTML(i.item)}</span>${desc}</td>
+        <td class="price">${formatPrice(i.price)}</td>
+      </tr>`;
+    }).join('');
     return `
       <div class="menu-card">
         <div class="card-header">
-          <h2>${cat.name}</h2>
+          <h2>${escapeHTML(cat.name)}</h2>
           ${cat.image ? `<img src="${cat.image}" class="category-img" loading="lazy" alt="">` : ''}
         </div>
         <div class="menu-table-wrapper">
@@ -343,10 +391,16 @@ function packTVSlides(categories, menuLabel) {
 
 function tvSlideHTML(slide) {
   const cols = slide.categories.map(cat => {
-    const rows = cat.items.map(i =>
-      `<tr><td class="code">${i.code}</td><td class="item">${i.item}</td><td class="price">${formatPrice(i.price)}</td></tr>`
-    ).join('');
-    return `<div class="cat-col"><h2>${cat.name}</h2><table><tbody>${rows}</tbody></table></div>`;
+    const rows = cat.items.map(i => {
+      const desc = i.description
+        ? `<span class="tv-desc">${escapeHTML(i.description)}</span>` : '';
+      return `<tr>
+        <td class="code">${escapeHTML(i.code)}</td>
+        <td class="item-cell"><span class="tv-item">${escapeHTML(i.item)}</span>${desc}</td>
+        <td class="price">${formatPrice(i.price)}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="cat-col"><h2>${escapeHTML(cat.name)}</h2><table><tbody>${rows}</tbody></table></div>`;
   }).join('');
   const n = slide.categories.length;
   return `<div class="slide" style="grid-template-columns:repeat(${n},1fr)">${cols}</div>`;
@@ -367,22 +421,19 @@ function setupTabs() {
 }
 
 /* ========================================================================
-   MUSIC (TV only)
+   MUSIC
    ======================================================================== */
 function setupMusic() {
   if (!isTV) return;
   const audio = document.getElementById('bgMusic');
   if (!audio) return;
-
   audio.volume = 0.25;
   audio.muted = true;
-
   const tryPlay = () => {
     audio.play().then(() => {
       setTimeout(() => { audio.muted = false; }, 800);
     }).catch(() => {});
   };
-
   tryPlay();
   ['click','touchstart','keydown'].forEach(evt =>
     document.addEventListener(evt, () => {
@@ -408,13 +459,11 @@ fetch(API_URL)
         ...packTVSlides(foodCats,   'FOOD MENU'),
         ...packTVSlides(drinksCats, 'DRINKS & BEVERAGES')
       ];
-
       if (!slides.length) {
         document.getElementById('slideWrap').innerHTML =
           '<div class="loading">No items in menu.</div>';
         return;
       }
-
       const wrap = document.getElementById('slideWrap');
       wrap.innerHTML = slides.map(tvSlideHTML).join('');
       const slideEls = wrap.querySelectorAll('.slide');
@@ -434,7 +483,6 @@ fetch(API_URL)
       show(0);
       setInterval(() => { i = (i + 1) % slides.length; show(i); },
                   TV_SLIDE_SECONDS * 1000);
-
       setupMusic();
     } else {
       document.getElementById('food-grid').innerHTML =
