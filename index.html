@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Masala Corner | Menu</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'Poppins', 'Roboto', system-ui, sans-serif;
+    color: #023859;
+    min-height: 100vh;
+  }
+  .loading { text-align: center; padding: 3rem; color: #2c6d91; font-weight: 600; }
+
+  /* ===================== MOBILE ===================== */
+  body.mobile-mode {
+    background: linear-gradient(135deg, #cce7ff 0%, #a8d4fc 100%);
+    padding: 2rem 1.2rem;
+  }
+  body.mobile-mode .menu-wrapper {
+    max-width: 1500px; margin: 0 auto;
+    background: rgba(255,255,255,0.94);
+    border-radius: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0,30,50,0.2);
+    padding: 1.5rem 1.8rem 2rem 1.8rem;
+  }
+  body.mobile-mode .resto-header {
+    text-align: center; margin-bottom: 1.8rem;
+    border-bottom: 2px solid #7bc3f0; padding-bottom: 1rem;
+  }
+  body.mobile-mode .resto-header h1 {
+    font-size: 2.8rem;
+    background: linear-gradient(120deg, #02658b, #2a85b5);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    display: inline-flex; align-items: center; gap: 12px;
+    flex-wrap: wrap; justify-content: center;
+  }
+  body.mobile-mode .resto-header h1 i { color: #ff914d; -webkit-text-fill-color: #ff914d; }
+  body.mobile-mode .location-contact {
+    background: #e3f2fdcc; display: inline-flex; flex-wrap: wrap;
+    justify-content: center; gap: 1.8rem; margin-top: 12px;
+    padding: 0.6rem 1.8rem; border-radius: 60px;
+    font-weight: 600; font-size: 0.95rem;
+  }
+  body.mobile-mode .location-contact i { margin-right: 6px; color: #ff7e2e; }
+  body.mobile-mode .tagline { font-size: 0.9rem; margin-top: 10px; color: #2c6d91; font-weight: 500; }
+  body.mobile-mode .tab-buttons {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    justify-content: center; margin: 1.5rem 0;
+  }
+  body.mobile-mode .tab-btn {
+    background: #e3f2fd; border: none; padding: 12px 28px;
+    font-size: 1.1rem; font-weight: 700; border-radius: 50px;
+    cursor: pointer; transition: all 0.2s; color: #02658b;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  body.mobile-mode .tab-btn.active {
+    background: #2f95cf; color: white;
+    box-shadow: 0 4px 12px rgba(47,149,207,0.4);
+  }
+  body.mobile-mode .tab-content { display: none; animation: fadeIn 0.3s ease; }
+  body.mobile-mode .tab-content.active-tab { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+  body.mobile-mode .category-grid {
+    display: flex; flex-wrap: wrap; gap: 1.8rem; margin-top: 1.2rem;
+  }
+  body.mobile-mode .menu-card {
+    background: #ffffffec; border-radius: 1.8rem;
+    box-shadow: 0 8px 18px rgba(0,40,60,0.08);
+    flex: 1 1 360px; overflow: hidden;
+    border: 1px solid rgba(255,255,240,0.8);
+  }
+  body.mobile-mode .card-header {
+    background: #2f95cfdd; padding: 0.8rem 1.3rem;
+    border-left: 8px solid #ffbe76;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  body.mobile-mode .card-header h2 {
+    font-size: 1.5rem; font-weight: 700; color: white;
+    display: flex; align-items: center; gap: 12px;
+  }
+  body.mobile-mode .category-img {
+    width: 70px; height: 70px; object-fit: cover;
+    border-radius: 16px; border: 2px solid #fff;
+  }
+  body.mobile-mode .menu-table-wrapper { overflow-x: auto; padding: 0.6rem 0.8rem 1rem 0.8rem; }
+  body.mobile-mode .menu-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  body.mobile-mode .menu-table th {
+    text-align: left; padding: 8px 6px; color: #1c6d97;
+    border-bottom: 2px solid #b9defa; font-weight: 700;
+    font-size: 0.8rem; text-transform: uppercase;
+  }
+  body.mobile-mode .menu-table td {
+    padding: 9px 6px; border-bottom: 1px solid #e1f0fe; vertical-align: middle;
+  }
+  body.mobile-mode .code-cell {
+    font-weight: 700; color: #ca6d2e; background: #fef5ea;
+    width: 65px; text-align: center; border-radius: 30px;
+    font-size: 0.75rem; font-family: monospace;
+  }
+  body.mobile-mode .item-name { font-weight: 600; color: #01415e; }
+  body.mobile-mode .price {
+    text-align: right; font-weight: 800; color: #d45a1e;
+    background: #fff2e8; padding: 4px 10px; border-radius: 40px;
+    white-space: nowrap;
+  }
+  body.mobile-mode .note-extra {
+    background: #fff6e8; margin-top: 2rem; border-radius: 1.5rem;
+    padding: 0.7rem 1.5rem; display: flex; flex-wrap: wrap;
+    justify-content: space-between; align-items: center;
+    font-size: 0.8rem; font-weight: 500;
+  }
+  body.mobile-mode footer {
+    text-align: center; margin-top: 28px; font-size: 0.7rem;
+    color: #22668d; border-top: 1px solid #bbdef5; padding-top: 18px;
+  }
+  @media (max-width: 750px) {
+    body.mobile-mode { padding: 1rem; }
+    body.mobile-mode .resto-header h1 { font-size: 2rem; }
+    body.mobile-mode .card-header h2 { font-size: 1.3rem; }
+    body.mobile-mode .category-img { width: 55px; height: 55px; }
+    body.mobile-mode .tab-btn { padding: 8px 18px; font-size: 0.9rem; }
+  }
+
+  /* ===================== TV ===================== */
+  body.tv-mode {
+    background: radial-gradient(ellipse at top, #0f2b3d 0%, #05131c 100%);
+    color: #e8f4fb;
+    overflow: hidden;
+    height: 100vh;
+  }
+  body.tv-mode .menu-wrapper { display: none; }
+  body.tv-mode .tv-frame {
+    display: flex; flex-direction: column;
+    height: 100vh; padding: 2.5vh 2.5vw;
+  }
+  body.tv-mode .tv-header {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 3px solid #ff914d; padding-bottom: 1.2vh; margin-bottom: 1.5vh;
+  }
+  body.tv-mode .tv-header h1 {
+    font-size: 3.4vh; letter-spacing: 2px;
+    background: linear-gradient(90deg, #7bd5ff, #ff914d);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    display: flex; align-items: center; gap: 1vw;
+  }
+  body.tv-mode .tv-header .contact {
+    font-size: 1.9vh; color: #a7d8f0; font-weight: 500; text-align: right;
+  }
+  body.tv-mode .tv-header .contact i { color: #ff914d; margin-right: 0.4vw; }
+  body.tv-mode .menu-badge {
+    display: inline-block; background: #ff914d; color: #05131c;
+    font-weight: 800; padding: 0.6vh 1.4vw; border-radius: 60px;
+    font-size: 1.8vh; letter-spacing: 1px; margin-bottom: 1.2vh;
+  }
+  body.tv-mode .slide-wrap { flex: 1; position: relative; }
+  body.tv-mode .slide {
+    position: absolute; inset: 0;
+    display: grid; gap: 1.4vw;
+    opacity: 0; transition: opacity 0.9s ease;
+  }
+  body.tv-mode .slide.active { opacity: 1; }
+  body.tv-mode .cat-col {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(123,213,255,0.18);
+    border-radius: 1.2rem;
+    padding: 1.6vh 1.4vw;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  body.tv-mode .cat-col h2 {
+    font-size: 2.6vh; color: #ffbe76;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    border-bottom: 2px solid rgba(255,190,118,0.3);
+    padding-bottom: 0.8vh; margin-bottom: 1vh;
+    display: flex; align-items: center; gap: 0.6vw;
+  }
+  body.tv-mode .cat-col table { width: 100%; border-collapse: collapse; }
+  body.tv-mode .cat-col td {
+    padding: 0.9vh 0; font-size: 2vh;
+    border-bottom: 1px solid rgba(123,213,255,0.08);
+    vertical-align: middle;
+  }
+  body.tv-mode .cat-col td.code {
+    color: #7bd5ff; font-family: monospace; font-weight: 700;
+    width: 3.5vw; font-size: 1.7vh;
+  }
+  body.tv-mode .cat-col td.item { color: #e8f4fb; font-weight: 600; }
+  body.tv-mode .cat-col td.price {
+    color: #ffbe76; font-weight: 800; text-align: right;
+    white-space: nowrap; padding-left: 0.8vw;
+  }
+  body.tv-mode .progress {
+    display: flex; gap: 6px; justify-content: center; margin-top: 1.5vh;
+  }
+  body.tv-mode .progress span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(123,213,255,0.25); transition: all 0.3s;
+  }
+  body.tv-mode .progress span.on {
+    background: #ff914d; width: 28px; border-radius: 6px;
+  }
+  body.tv-mode .tv-frame .loading { color: #7bd5ff; font-size: 2.5vh; }
+
+  .tv-frame { display: none; }
+  body.tv-mode .tv-frame { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- ============ MOBILE LAYOUT ============ -->
+<div class="menu-wrapper">
+  <div class="resto-header">
+    <h1><i class="fas fa-utensils"></i> MASALA CORNER <i class="fas fa-pepper-hot"></i></h1>
+    <div class="location-contact">
+      <span><i class="fas fa-location-dot"></i> A.Dh Fenfushi, Maldives</span>
+      <span><i class="fas fa-phone-alt"></i> +960 7555990</span>
+    </div>
+    <div class="tagline"><i class="fas fa-leaf"></i> Authentic Flavours | Fresh Ingredients | Takeaway Available</div>
+  </div>
+
+  <div class="tab-buttons">
+    <button class="tab-btn active" data-tab="food"><i class="fas fa-utensils"></i> FOOD MENU</button>
+    <button class="tab-btn" data-tab="drinks"><i class="fas fa-mug-hot"></i> DRINKS & BEVERAGES</button>
+  </div>
+
+  <div id="food-tab" class="tab-content active-tab">
+    <div class="category-grid" id="food-grid"><div class="loading">Loading menu…</div></div>
+    <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: 7555990</span></div>
+  </div>
+
+  <div id="drinks-tab" class="tab-content">
+    <div class="category-grid" id="drinks-grid"><div class="loading">Loading menu…</div></div>
+    <div class="note-extra"><span></span><span><i class="fas fa-phone"></i> Order: 7555990</span></div>
+  </div>
+
+  <footer><i class="fas fa-heart" style="color:#f45b2e;"></i> Masala Corner – A.Dh Fenfushi, Maldives | All prices in MVR</footer>
+</div>
+
+<!-- ============ TV LAYOUT ============ -->
+<div class="tv-frame">
+  <div class="tv-header">
+    <h1><i class="fas fa-utensils"></i> MASALA CORNER</h1>
+    <div class="contact">
+      <div><i class="fas fa-location-dot"></i> A.Dh Fenfushi, Maldives</div>
+      <div><i class="fas fa-phone-alt"></i> Order: 7555990</div>
+    </div>
+  </div>
+  <div><span class="menu-badge" id="badge">FOOD MENU</span></div>
+  <div class="slide-wrap" id="slideWrap"><div class="loading">Loading menu…</div></div>
+  <div class="progress" id="progress"></div>
+</div>
+
+<audio id="bgMusic" loop preload="auto">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* ========================================================================
+   CONFIG
+   ======================================================================== */
+const API_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+const TV_SLIDE_SECONDS = 18;
+const TV_ITEMS_PER_SLIDE = 8;
+const TV_AUTODETECT_WIDTH = 1200;
+
+/* ========================================================================
+   MODE DETECTION
+   ======================================================================== */
+const params = new URLSearchParams(location.search);
+const forcedMode = params.get('mode');
+const isTV = forcedMode === 'tv' ||
+             (forcedMode !== 'mobile' && window.innerWidth >= TV_AUTODETECT_WIDTH);
+document.body.classList.add(isTV ? 'tv-mode' : 'mobile-mode');
+document.title = 'Masala Corner | ' + (isTV ? 'TV Menu' : 'Menu');
+
+/* ========================================================================
+   HELPERS
+   ======================================================================== */
+function formatPrice(p) {
+  if (!p) return '';
+  const s = String(p).trim();
+  return /^mvr/i.test(s) ? s.toUpperCase() : 'MVR ' + s;
+}
+
+function groupByCategory(items) {
+  const list = [], map = {};
+  items.forEach(i => {
+    if (!map[i.category]) {
+      map[i.category] = { name: i.category, image: i.categoryImage, items: [] };
+      list.push(map[i.category]);
+    }
+    map[i.category].items.push(i);
+  });
+  return list;
+}
+
+/* ========================================================================
+   MOBILE RENDER
+   ======================================================================== */
+function buildMobileCards(categories) {
+  if (!categories.length) return '<div class="loading">No items yet.</div>';
+  return categories.map(cat => {
+    const rows = cat.items.map(i =>
+      `<tr><td class="code-cell">${i.code}</td><td class="item-name">${i.item}</td><td class="price">${formatPrice(i.price)}</td></tr>`
+    ).join('');
+    return `
+      <div class="menu-card">
+        <div class="card-header">
+          <h2>${cat.name}</h2>
+          ${cat.image ? `<img src="${cat.image}" class="category-img" loading="lazy" alt="">` : ''}
+        </div>
+        <div class="menu-table-wrapper">
+          <table class="menu-table">
+            <thead><tr><th>CODE</th><th>ITEM</th><th style="text-align:right">PRICE</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/* ========================================================================
+   TV RENDER
+   ======================================================================== */
+function packTVSlides(categories, menuLabel) {
+  const slides = [];
+  let current = [], count = 0;
+  categories.forEach(cat => {
+    if (count + cat.items.length > TV_ITEMS_PER_SLIDE && current.length > 0) {
+      slides.push({ label: menuLabel, categories: current });
+      current = []; count = 0;
+    }
+    current.push(cat);
+    count += cat.items.length;
+  });
+  if (current.length) slides.push({ label: menuLabel, categories: current });
+  return slides;
+}
+
+function tvSlideHTML(slide) {
+  const cols = slide.categories.map(cat => {
+    const rows = cat.items.map(i =>
+      `<tr><td class="code">${i.code}</td><td class="item">${i.item}</td><td class="price">${formatPrice(i.price)}</td></tr>`
+    ).join('');
+    return `<div class="cat-col"><h2>${cat.name}</h2><table><tbody>${rows}</tbody></table></div>`;
+  }).join('');
+  const n = slide.categories.length;
+  return `<div class="slide" style="grid-template-columns:repeat(${n},1fr)">${cols}</div>`;
+}
+
+/* ========================================================================
+   TABS
+   ======================================================================== */
+function setupTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
+      document.getElementById(btn.dataset.tab + '-tab').classList.add('active-tab');
+    });
+  });
+}
+
+/* ========================================================================
+   MUSIC (TV only)
+   ======================================================================== */
+function setupMusic() {
+  if (!isTV) return;
+  const audio = document.getElementById('bgMusic');
+  if (!audio) return;
+
+  audio.volume = 0.25;
+  audio.muted = true;
+
+  const tryPlay = () => {
+    audio.play().then(() => {
+      setTimeout(() => { audio.muted = false; }, 800);
+    }).catch(() => {});
+  };
+
+  tryPlay();
+  ['click','touchstart','keydown'].forEach(evt =>
+    document.addEventListener(evt, () => {
+      audio.muted = false;
+      audio.play().catch(() => {});
+    }, { once: true })
+  );
+}
+
+/* ========================================================================
+   FETCH + INIT
+   ======================================================================== */
+fetch(API_URL)
+  .then(r => r.json())
+  .then(items => {
+    const foodItems   = items.filter(i => i.menu === 'food');
+    const drinksItems = items.filter(i => i.menu === 'drinks');
+
+    if (isTV) {
+      const foodCats   = groupByCategory(foodItems);
+      const drinksCats = groupByCategory(drinksItems);
+      const slides = [
+        ...packTVSlides(foodCats,   'FOOD MENU'),
+        ...packTVSlides(drinksCats, 'DRINKS & BEVERAGES')
+      ];
+
+      if (!slides.length) {
+        document.getElementById('slideWrap').innerHTML =
+          '<div class="loading">No items in menu.</div>';
+        return;
+      }
+
+      const wrap = document.getElementById('slideWrap');
+      wrap.innerHTML = slides.map(tvSlideHTML).join('');
+      const slideEls = wrap.querySelectorAll('.slide');
+      const badge = document.getElementById('badge');
+      const progress = document.getElementById('progress');
+      progress.innerHTML = slides.map(() => '<span></span>').join('');
+      const dots = progress.querySelectorAll('span');
+
+      let i = 0;
+      function show(idx) {
+        slideEls.forEach(el => el.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('on'));
+        slideEls[idx].classList.add('active');
+        dots[idx].classList.add('on');
+        badge.textContent = slides[idx].label;
+      }
+      show(0);
+      setInterval(() => { i = (i + 1) % slides.length; show(i); },
+                  TV_SLIDE_SECONDS * 1000);
+
+      setupMusic();
+    } else {
+      document.getElementById('food-grid').innerHTML =
+        buildMobileCards(groupByCategory(foodItems));
+      document.getElementById('drinks-grid').innerHTML =
+        buildMobileCards(groupByCategory(drinksItems));
+      setupTabs();
+    }
+  })
+  .catch(err => {
+    document.querySelectorAll('.loading').forEach(el =>
+      el.textContent = 'Could not load menu. Please refresh.');
+    console.error(err);
+  });
+</script>
+</body>
+</html>
